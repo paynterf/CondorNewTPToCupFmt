@@ -248,6 +248,7 @@ ofile = open(outfilename,'w')
 ofile.write(f"name,code,country,lat,lon,elev,style,rwdir,rwlen,freq,desc\n")
 
 #   Step3: Read 'infile' lines until finding a line starting with 'TP' or 'Start'
+#   04/04/24 added 'Finish' to word search list
 f=open(infile, encoding="utf-8")#"utf-8" encoding param needed so deg symbol displays OK
 inlist = f.readlines()
 f.close()
@@ -276,7 +277,7 @@ while x < len(inlist):
     outstr = '' #03/23/2024 needed to avoid error in verbose print block
     numstr = '' #03/23/2024 needed to avoid error in verbose print block
     if 'Start' in instr:
-        TPname = 'NewStart'+ str(x)
+        TPname = 'NewStart'+ str(x) #append line# as unique id
         outstr, x = ConstructCUPString(TPname, inlist, x)
         ofile.write(outstr + "\n") #Write .CUP formatted line & write to outfile
     # if args.verbose:
@@ -286,6 +287,13 @@ while x < len(inlist):
         #TP number separated by a space
         numstr = instr[2:4]
         TPname = 'NewTP'+ numstr
+        outstr, x = ConstructCUPString(TPname, inlist, x)
+        ofile.write(outstr + "\n") #Write .CUP formatted line & write to outfile
+        
+    elif 'Finish' in instr:
+        #TP number separated by a space
+        numstr = instr[2:4]
+        TPname = 'NewFinish'+ str(x) #append line# as unique id
         outstr, x = ConstructCUPString(TPname, inlist, x)
         ofile.write(outstr + "\n") #Write .CUP formatted line & write to outfile
         
